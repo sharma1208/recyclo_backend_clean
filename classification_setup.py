@@ -1,16 +1,21 @@
 import torch
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split
+from collections import Counter
 
-# Training set transformations (with augmentation!)
+# Updated training set transformations:
+# - Added RandomGrayscale, GaussianBlur, RandomAdjustSharpness to emphasize texture/reflection differences.
 train_transforms = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.RandomHorizontalFlip(),
     transforms.RandomRotation(15),
-    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+    transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),  # slightly stronger jitter
+    transforms.RandomGrayscale(p=0.1),       # convert 10% images to grayscale to force texture learning
+    transforms.GaussianBlur(kernel_size=3, sigma=(0.1, 2.0)), # blur to simulate reflections/texture variation
+    transforms.RandomAdjustSharpness(sharpness_factor=2, p=0.3),  # sharpen to enhance texture edges
     transforms.ToTensor(),
     transforms.Normalize(
-        mean=[0.485, 0.456, 0.406],
+        mean=[0.485, 0.456, 0.406], 
         std=[0.229, 0.224, 0.225]
     )
 ])
@@ -27,6 +32,25 @@ val_transforms = transforms.Compose([
 
 # Load the dataset from folder
 dataset = datasets.ImageFolder('datarecyclo/trashnet/data/dataset-resized')
+
+# Calculate class weights for imbalance handling
+# Count samples per class (dataset.targets gives labels for ImageFolder)
+class_counts = Counter(dataset.targets)
+num_samples = sum(class_counts.values())
+
+# Compute weights: inverse of class frequency normalized so sum=number of classes
+class_weights = []  # empty list to store weights per class
+num_classes = len(dataset.classes) # total number of classes, e.g. 6
+for i in range(num_classes): # loop over each class index
+    count = class_counts[i] # number of samples in this class i
+    weight = num_samples / (num_classes * count)  
+    # inverse frequency: total # of all samples in dataset/ (total classes * number of samples in current class)
+    class_weights.append(weight) # save the weight for this class
+# convert list of floats to a PyTorch tensor, needed for loss function
+class_weights = torch.tensor(class_weights, dtype=torch.float)
+
+print("Class counts:", class_counts)
+print("Class weights:", class_weights)
 
 # Split dataset into training and validation (80/20 split)
 train_size = int(0.8 * len(dataset))
