@@ -19,7 +19,7 @@ def format_material_for_frontend(material_key):
         "subtypes": list(material_data["types"].keys()) if "types" in material_data else []
     }
     
-    return response 
+    return response
 
 #For if there is a subtype for a category (eg. plastic has HDPE, LDPE etc. that a user can specify
 # in drop down frontend)

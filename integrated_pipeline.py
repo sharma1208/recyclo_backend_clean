@@ -4,14 +4,14 @@ from torchvision import models # access to resnet18 prebuilt model
 from ultralytics import YOLO #loads YOLOv8 model
 import cv2 #for image manipulation (drawing, loading)
 from PIL import Image #cropping and transforming images
-from classification_setup import val_transforms, dataset # euses your validation transforms (resize, normalize) and dataset.classes for label names.
+from classification_setup import val_transforms, dataset_classes # euses your validation transforms (resize, normalize) and dataset.classes for label names.
 
 # --- Load YOLOv8 Model for Object Detection ---
 yolo_model = YOLO("yolov8n.pt")
 
 # --- Load Fine-Tuned ResNet Classifier ---
 classifier = models.resnet18() #loads base resnet18
-classifier.fc = nn.Linear(512, len(dataset.classes))  #Replaces its final layer (fc) with a new Linear layer that has len(dataset.classes) outputs.
+classifier.fc = nn.Linear(512, len(dataset_classes))  #Replaces its final layer (fc) with a new Linear layer that has len(dataset.classes) outputs.
 #512 -> 6
 classifier.load_state_dict(torch.load("best_model.pth")) # loads fine tuned weights
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #move model to gpu or cpu
@@ -47,7 +47,7 @@ def detect_and_classify_objects(image_path, visualize=False, output_path=None): 
         with torch.no_grad(): #disable gradient 
             output = classifier(input_tensor) #raw output from model
             pred_idx = torch.argmax(output, dim=1).item() #find index of highest logit to get predicted class
-            material = dataset.classes[pred_idx] #material from classifier
+            material = dataset_classes[pred_idx] #material from classifier
 
         # Add detection info
         detections.append({
