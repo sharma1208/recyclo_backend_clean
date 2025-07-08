@@ -27,10 +27,35 @@ def detect_and_classify_objects(image_path, visualize=False, output_path=None): 
     results = yolo_model.predict(image_path)[0] #runs yolov8 on image and gets detection result
     #for first image
     detections = []
+    
+    # added for when YOLO detects no images, refer to detection loop for comments about how classifications work
+    if len(results.boxes) == 0:
+        print("⚠️ No objects detected by YOLO — running whole image through classifier...")
+        # No detections: classify whole image
+        pil_image = Image.fromarray(image_rgb)
+        input_tensor = val_transforms(pil_image).unsqueeze(0).to(device)
+        with torch.no_grad():
+            output = classifier(input_tensor)
+            pred_idx = torch.argmax(output, dim=1).item()
+            material = dataset_classes[pred_idx]
+        
+        detections.append({
+            'original_class': 'none',
+            'material_prediction': material,
+            'confidence': None,
+            'coords': None,
+        })
+        print(f"No detections found, classified whole image as {material}")
+        
+        # Optionally visualize bounding box around whole image
+        if visualize:
+            cv2.rectangle(image, (0, 0), (image.shape[1], image.shape[0]), (0, 0, 255), 2)
+            label = f"{material} (whole image)"
+            cv2.putText(image, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
     #loop over detections
     for box in results.boxes:
-        cls_id = int(box.cls[0]) #yolo predicted class
+        cls_id = int(box.cls[0]) # yolo predicted class
         conf = float(box.conf[0]) #yolo confidence score
         x1, y1, x2, y2 = map(int, box.xyxy[0]) #coords of bounding box
         
