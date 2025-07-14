@@ -141,7 +141,7 @@ carbon_data = {
                     "Recycled: Exhibit 3-17"
                 ]
             },
-            "office_paper": {
+            "office paper": {
                 "type": "office paper",
                 "recycling_rate_percent": 65.0,
                 "recycled_mtco2e_per_short_ton": -2.86,
@@ -155,7 +155,7 @@ carbon_data = {
                     "Recycled: Exhibit 3-17"
                 ]
             },
-            "phone_books": {
+            "phone books": {
                 "type": "phone books",
                 "recycling_rate_percent": 65.0,
                 "recycled_mtco2e_per_short_ton": -2.62 ,
@@ -183,7 +183,7 @@ carbon_data = {
                     "Recycled: Exhibit 3-17"
                 ]
             },  
-            "mixed_paper_general": {
+            "mixed paper general": {
                 "type": "mixed paper (general)",
                 "recycling_rate_percent": 65.0,
                 "recycled_mtco2e_per_short_ton": -3.55,
@@ -197,7 +197,7 @@ carbon_data = {
                     "Recycled: Exhibit 3-17"
                 ]
             },
-            "mixed_paper_residential": {
+            "mixed paper residential": {
                 "type": "mixed paper (primarily residential)",
                 "recycling_rate_percent": 65.0,
                 "recycled_mtco2e_per_short_ton": -3.55,
@@ -211,7 +211,7 @@ carbon_data = {
                     "Recycled: Exhibit 3-17"
                 ]
             },
-            "mixed_paper_office": {
+            "mixed paper office": {
                 "type": "mixed paper (primarily from offices)",
                 "recycling_rate_percent": 65.0,
                 "recycled_mtco2e_per_short_ton": -3.58,

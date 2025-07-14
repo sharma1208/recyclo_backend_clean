@@ -1,7 +1,9 @@
 import torch  # main pytorch library
 import torch.nn as nn  # lets you create or modify neural network layers
 from torchvision import models  # contains pretrained models like ResNet18
-from classification_setup import train_loader, val_loader, num_classes, class_weights
+from classification_setup import get_data_loaders
+
+train_loader, val_loader, num_classes, class_weights = get_data_loaders()
 
 model = models.resnet18(pretrained=True)  # this downloads pretrained weights on ImageNet automatically
 

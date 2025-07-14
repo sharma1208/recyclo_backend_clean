@@ -74,6 +74,40 @@ def subtype():
     except Exception as e:
         print("🔥 Exception in /subtype:", e)
         return jsonify({"error": str(e)}), 400
+
+import json
+from datetime import datetime
+
+@app.route('/report_misclassification', methods=['POST'])
+def report_misclassification():
+    print("📩 Received POST request to /report_misclassification")
+    try:
+        data = request.get_json()
+
+        # ✅ Validate required fields
+        if not all(k in data for k in ['original', 'corrected_material', 'timestamp']):
+            print("❌ Missing fields in misclassification report")
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        # ✅ Generate safe timestamp for filename
+        timestamp = data.get("timestamp", datetime.utcnow().isoformat())
+        safe_timestamp = timestamp.replace(":", "-")
+        filename = f"logs/misclassification_{safe_timestamp}.json"
+
+        # ✅ Ensure logs directory exists
+        os.makedirs("logs", exist_ok=True)
+
+        # ✅ Save report as JSON
+        with open(filename, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        print(f"✅ Misclassification report saved: {filename}")
+        return jsonify({'message': 'Report received and logged.'}), 200
+
+    except Exception as e:
+        print(f"🔥 Error in /report_misclassification: {e}")
+        return jsonify({'error': str(e)}), 500
+
     
 #Starts your Flask server locally on localhost:5001.
 if __name__ == '__main__':

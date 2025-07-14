@@ -1,0 +1,23 @@
+{
+  "original": {
+    "carbon_impact_rating_recycled": "low",
+    "carbon_impact_rating_unrecycled": "high",
+    "has_subtypes": false,
+    "material": "cardboard",
+    "notes": [
+      "Recycled carbon score reflects post-consumer emissions from Exhibit 3-17.",
+      "Unrecycled emissions computed from process energy + transportation + process non-energy (Exhibit 3-21).",
+      "MTCO2e/short ton values converted to kg CO2e/kg using MTCO2e \u00d7 1.103.",
+      "Corrugated containers represent cardboard in WARM modeling due to lack of separate category.",
+      "High recycling rate (96.5%) contributes to low overall impact when recycled."
+    ],
+    "recyclable": true,
+    "recycled_carbon_score": -3.463,
+    "recycling_rate_percent": 96.5,
+    "subtypes": [],
+    "unrecycled_carbon_score": 0.916,
+    "image_path": "/Users/venyasharma/Library/Developer/CoreSimulator/Devices/7388578A-7929-40C5-AE53-B9140FBA52BE/data/Containers/Data/Application/88D69609-BB66-437F-BFC5-DD3E0FEA5039/tmp/image_picker_36AC19E5-D6E3-4CD0-9EA7-45984653E155-29751-00000DE6A94E2066.jpg"
+  },
+  "corrected_material": "Paper",
+  "timestamp": "2025-07-14T13:08:14.930829"
+}
